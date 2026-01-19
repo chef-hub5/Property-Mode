@@ -1,0 +1,1764 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kala Real Estate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    .carousel-slide {
+      transition: opacity 0.5s ease-in-out;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .modal {
+      display: none;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .image-lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .image-lightbox.active {
+      display: flex;
+    }
+    .image-lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    .property-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .property-card {
+      transition: all 0.3s ease;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-white overflow-auto">
+  <div id="app" class="w-full min-h-full"><!-- Sticky Header -->
+   <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16 sm:h-20"><!-- Logo --> <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl sm:text-3xl font-bold text-slate-800"> <span id="brand-logo">Kala</span> </a> <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-8"><a href="#" onclick="navigateTo('home'); return false;" class="text-slate-700 hover:text-slate-900 font-medium transition-colors">Home</a> <a href="#" onclick="navigateTo('all-properties'); return false;" class="text-slate-700 hover:text-slate-900 font-medium transition-colors">Property</a> <a href="#" onclick="navigateTo('about'); return false;" class="text-slate-700 hover:text-slate-900 font-medium transition-colors">About Us</a>
+      </nav><!-- Contact Button Desktop --> <button onclick="openContactModal()" class="hidden md:block bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-6 py-2.5 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"> Contact Us </button> <!-- Mobile Menu Button --> <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+       <svg id="menu-icon" class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg>
+       <svg id="close-icon" class="w-6 h-6 text-slate-800 hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div><!-- Mobile Menu -->
+     <div id="mobile-menu" class="md:hidden hidden pb-4">
+      <nav class="flex flex-col space-y-3"><a href="#" onclick="navigateTo('home'); toggleMobileMenu(); return false;" class="text-slate-700 hover:text-slate-900 font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors">Home</a> <a href="#" onclick="navigateTo('all-properties'); toggleMobileMenu(); return false;" class="text-slate-700 hover:text-slate-900 font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors">Property</a> <a href="#" onclick="navigateTo('about'); toggleMobileMenu(); return false;" class="text-slate-700 hover:text-slate-900 font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors">About Us</a> <button onclick="openContactModal(); toggleMobileMenu();" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-6 py-3 rounded-full transition-all duration-300 mt-2"> Contact Us </button>
+      </nav>
+     </div>
+    </div>
+   </header><!-- HOME PAGE -->
+   <div id="page-home" class="page active"><!-- Hero Section with Carousel -->
+    <section class="relative h-screen pt-16 sm:pt-20">
+     <div id="hero-carousel" class="relative w-full h-full overflow-hidden"><!-- Slide 1 -->
+      <div class="carousel-slide absolute inset-0 opacity-100" data-slide="0"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&amp;q=80" alt="Luxury Modern Villa" class="w-full h-full object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#2C3E50';">
+       <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent"></div>
+      </div><!-- Slide 2 -->
+      <div class="carousel-slide absolute inset-0 opacity-0" data-slide="1"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&amp;q=80" alt="Contemporary Architecture" class="w-full h-full object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#2C3E50';">
+       <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent"></div>
+      </div><!-- Slide 3 -->
+      <div class="carousel-slide absolute inset-0 opacity-0" data-slide="2"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&amp;q=80" alt="Elegant Estate" class="w-full h-full object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#2C3E50';">
+       <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent"></div>
+      </div><!-- Hero Content Overlay -->
+      <div class="absolute inset-0 flex items-center">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="max-w-2xl"><!-- Customer Badge -->
+         <div class="flex items-center gap-3 mb-6">
+          <div class="flex -space-x-2">
+           <div class="w-10 h-10 rounded-full bg-yellow-400 border-2 border-white flex items-center justify-center text-sm font-bold text-slate-900">
+            A
+           </div>
+           <div class="w-10 h-10 rounded-full bg-slate-600 border-2 border-white flex items-center justify-center text-sm font-bold text-white">
+            B
+           </div>
+           <div class="w-10 h-10 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center text-sm font-bold text-slate-900">
+            C
+           </div>
+          </div><span class="text-white/90 text-sm font-medium">55K+ Happy Customers</span>
+         </div>
+         <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">Find Your Perfect Property with Kala</h1>
+         <p id="hero-subtitle" class="text-lg sm:text-xl text-white/80 mb-8 max-w-lg">Discover your dream home with Lagos' most trusted real estate partner. Buy, sell, or rent premium properties with confidence.</p><button onclick="document.getElementById('search-section').scrollIntoView({behavior: 'smooth'})" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-8 py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"> Explore Properties </button>
+        </div>
+       </div>
+      </div><!-- Carousel Indicators -->
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3"><button onclick="goToSlide(0)" class="carousel-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all" data-dot="0"></button> <button onclick="goToSlide(1)" class="carousel-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all" data-dot="1"></button> <button onclick="goToSlide(2)" class="carousel-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all" data-dot="2"></button>
+      </div><!-- Carousel Arrows --> <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center transition-all">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+       </svg></button> <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center transition-all">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+       </svg></button>
+     </div>
+    </section><!-- Search Section -->
+    <section id="search-section" class="relative z-10 -mt-16 sm:-mt-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+     <div class="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><!-- Location Dropdown -->
+       <div class="relative"><label class="block text-sm font-medium text-slate-600 mb-2">Location</label> <select id="location-select" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Select Location</option> <option value="ikoyi">Ikoyi</option> <option value="victoria-island">Victoria Island</option> <option value="lekki">Lekki</option> <option value="ajah">Ajah</option> <option value="ikeja">Ikeja</option> <option value="yaba">Yaba</option> <option value="surulere">Surulere</option> <option value="lagos-island">Lagos Island</option> <option value="banana-island">Banana Island</option> <option value="magodo">Magodo</option> </select>
+        <svg class="absolute right-4 bottom-3.5 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+       </div><!-- Property Type -->
+       <div class="relative"><label class="block text-sm font-medium text-slate-600 mb-2">Property Type</label> <select id="property-type" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="residence">Residence</option> <option value="apartment">Apartment</option> <option value="villa">Villa</option> <option value="duplex">Duplex</option> <option value="penthouse">Penthouse</option> <option value="land">Land</option> </select>
+        <svg class="absolute right-4 bottom-3.5 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+       </div><!-- Budget -->
+       <div class="relative"><label class="block text-sm font-medium text-slate-600 mb-2">Your Budget</label> <select id="budget-range" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Set Range</option> <option value="0-50">₦0 - �����50M</option> <option value="50-100">₦50M - ₦100M</option> <option value="100-200">₦100M - ₦200M</option> <option value="200-500">₦200M - ₦500M</option> <option value="500+">₦500M+</option> </select>
+        <svg class="absolute right-4 bottom-3.5 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+       </div><!-- Bedrooms -->
+       <div class="relative"><label class="block text-sm font-medium text-slate-600 mb-2">Bedroom(s)</label> <select id="bedrooms" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Any</option> <option value="1">1 Bedroom</option> <option value="2">2 Bedrooms</option> <option value="3">3 Bedrooms</option> <option value="4">4 Bedrooms</option> <option value="5+">5+ Bedrooms</option> </select>
+        <svg class="absolute right-4 bottom-3.5 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+       </div><!-- Search Button -->
+       <div class="flex items-end"><button onclick="searchProperties()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"> Search Property </button>
+       </div>
+      </div>
+     </div>
+    </section><!-- New Listings Section -->
+    <section class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="bg-gray-100 rounded-3xl p-6 sm:p-8 lg:p-12">
+       <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">New Listings</h2><button onclick="navigateTo('all-properties')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-5 py-2 rounded-full transition-all duration-300 text-sm"> See All </button>
+       </div>
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Listing Card 1 -->
+        <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openPropertyModal(0)">
+         <div class="relative"><img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&amp;q=80" alt="The New Spring Villa" class="w-full h-64 object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+          <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+           For Sale
+          </div>
+         </div>
+         <div class="p-6">
+          <h3 class="text-xl font-bold text-slate-900 mb-2">The New Spring Villa</h3>
+          <p class="text-slate-500 flex items-center gap-2 mb-4">
+           <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+           </svg> Lekki Phase 1, Lagos</p>
+          <div class="flex items-center justify-between"><span class="text-2xl font-bold text-slate-900">₦185,000,000</span> <button onclick="event.stopPropagation(); openPropertyModal(0)" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-4 py-2 rounded-lg transition-all text-sm"> See Details </button>
+          </div>
+         </div>
+        </div><!-- Listing Card 2 -->
+        <div class="property-card bg-slate-800 rounded-2xl overflow-hidden shadow-lg cursor-pointer" onclick="openPropertyModal(1)">
+         <div class="relative"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&amp;q=80" alt="The River Side" class="w-full h-64 object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#475569';">
+          <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+           For Sale
+          </div>
+         </div>
+         <div class="p-6">
+          <h3 class="text-xl font-bold text-white mb-2">The River Side</h3>
+          <p class="text-slate-300 flex items-center gap-2 mb-4">
+           <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+           </svg> Banana Island, Lagos</p>
+          <div class="flex items-center justify-between"><span class="text-2xl font-bold text-white">₦495,000,000</span> <button onclick="event.stopPropagation(); openPropertyModal(1)" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-all text-sm"> See Details </button>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Property List Section -->
+    <section class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
+     <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+       <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Property List</h2>
+       <div class="flex items-center gap-4">
+        <div class="flex gap-2"><button onclick="navigateTo('buy-property')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-5 py-2 rounded-full transition-all duration-300 text-sm"> Buy Property </button> <button onclick="navigateTo('rent-property')" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2 rounded-full transition-all duration-300 text-sm"> Rent Property </button>
+        </div><button onclick="navigateTo('all-properties')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold px-5 py-2 rounded-full transition-all duration-300 text-sm"> See All </button>
+       </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Property Card 1 -->
+       <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 cursor-pointer" onclick="openPropertyModal(2)">
+        <div class="relative"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&amp;q=80" alt="Lily Residence" class="w-full h-56 object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+         <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+          For Sale
+         </div>
+        </div>
+        <div class="p-5">
+         <h3 class="text-lg font-bold text-slate-900 mb-2">Lily Residence</h3>
+         <p class="text-slate-500 flex items-center gap-2 text-sm mb-4">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg> Victoria Island, Lagos</p>
+         <div class="flex items-center justify-between"><span class="text-xl font-bold text-slate-900">₦170,000,000</span> <button onclick="event.stopPropagation(); openPropertyModal(2)" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg transition-all text-xs"> See Details </button>
+         </div>
+        </div>
+       </div><!-- Property Card 2 -->
+       <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 cursor-pointer" onclick="openPropertyModal(3)">
+        <div class="relative"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600&amp;q=80" alt="Grand Hill Residence" class="w-full h-56 object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+         <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+          For Sale
+         </div>
+        </div>
+        <div class="p-5">
+         <h3 class="text-lg font-bold text-slate-900 mb-2">Grand Hill Residence</h3>
+         <p class="text-slate-500 flex items-center gap-2 text-sm mb-4">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg> Ikoyi, Lagos</p>
+         <div class="flex items-center justify-between"><span class="text-xl font-bold text-slate-900">₦340,000,000</span> <button onclick="event.stopPropagation(); openPropertyModal(3)" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg transition-all text-xs"> See Details </button>
+         </div>
+        </div>
+       </div><!-- Property Card 3 -->
+       <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 cursor-pointer" onclick="openPropertyModal(4)">
+        <div class="relative"><img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&amp;q=80" alt="New Lake Residence" class="w-full h-56 object-cover" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+         <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+          For Sale
+         </div>
+        </div>
+        <div class="p-5">
+         <h3 class="text-lg font-bold text-slate-900 mb-2">New Lake Residence</h3>
+         <p class="text-slate-500 flex items-center gap-2 text-sm mb-4">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg> Lekki Phase 2, Lagos</p>
+         <div class="flex items-center justify-between"><span class="text-xl font-bold text-slate-900">₦450,000,000</span> <button onclick="event.stopPropagation(); openPropertyModal(4)" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg transition-all text-xs"> See Details </button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+       <div>
+        <h3 class="text-2xl font-bold mb-4">Kala</h3>
+        <p class="text-slate-400">Your trusted partner in finding the perfect property in Lagos.</p>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-yellow-400 transition-colors">Home</a></li>
+         <li><a href="#" onclick="navigateTo('property'); return false;" class="hover:text-yellow-400 transition-colors">Properties</a></li>
+         <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Property Types</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('buy-property'); return false;" class="hover:text-yellow-400 transition-colors">Buy Property</a></li>
+         <li><a href="#" onclick="navigateTo('rent-property'); return false;" class="hover:text-yellow-400 transition-colors">Rent Property</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li>Victoria Island, Lagos</li>
+         <li>+234 800 KALA 000</li>
+         <li>info@kala.ng</li>
+        </ul>
+       </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+       <p>© 2024 Kala Real Estate. All rights reserved.</p>
+      </div>
+     </div>
+    </footer>
+   </div><!-- PROPERTY PAGE -->
+   <div id="page-property" class="page">
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+     <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Search Results</h1>
+      <p id="search-results-summary" class="text-slate-600 mb-8"></p>
+      <div id="no-results-message" class="hidden text-center py-16">
+       <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-bold text-slate-900 mb-3">No Properties Found</h3>
+       <p class="text-slate-600 mb-6 max-w-md mx-auto">We couldn't find any properties matching your search criteria. Try adjusting your filters or browse all properties.</p><button onclick="navigateTo('all-properties')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-8 py-3 rounded-full transition-all duration-300"> Browse All Properties </button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-properties-grid"><!-- Properties will be populated by JS -->
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+       <div>
+        <h3 class="text-2xl font-bold mb-4">Kala</h3>
+        <p class="text-slate-400">Your trusted partner in finding the perfect property in Lagos.</p>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-yellow-400 transition-colors">Home</a></li>
+         <li><a href="#" onclick="navigateTo('property'); return false;" class="hover:text-yellow-400 transition-colors">Properties</a></li>
+         <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Property Types</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('buy-property'); return false;" class="hover:text-yellow-400 transition-colors">Buy Property</a></li>
+         <li><a href="#" onclick="navigateTo('rent-property'); return false;" class="hover:text-yellow-400 transition-colors">Rent Property</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li>Victoria Island, Lagos</li>
+         <li>+234 800 KALA 000</li>
+         <li>info@kala.ng</li>
+        </ul>
+       </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+       <p>© 2024 Kala Real Estate. All rights reserved.</p>
+      </div>
+     </div>
+    </footer>
+   </div><!-- BUY PROPERTY PAGE -->
+   <div id="page-buy-property" class="page">
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+     <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Properties for Sale</h1>
+      <p class="text-slate-600 mb-8">Find your dream home from our curated selection of properties</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="buy-properties-grid"><!-- Properties will be populated by JS -->
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+       <div>
+        <h3 class="text-2xl font-bold mb-4">Kala</h3>
+        <p class="text-slate-400">Your trusted partner in finding the perfect property in Lagos.</p>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-yellow-400 transition-colors">Home</a></li>
+         <li><a href="#" onclick="navigateTo('property'); return false;" class="hover:text-yellow-400 transition-colors">Properties</a></li>
+         <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Property Types</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('buy-property'); return false;" class="hover:text-yellow-400 transition-colors">Buy Property</a></li>
+         <li><a href="#" onclick="navigateTo('rent-property'); return false;" class="hover:text-yellow-400 transition-colors">Rent Property</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li>Victoria Island, Lagos</li>
+         <li>+234 800 KALA 000</li>
+         <li>info@kala.ng</li>
+        </ul>
+       </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+       <p>© 2024 Kala Real Estate. All rights reserved.</p>
+      </div>
+     </div>
+    </footer>
+   </div><!-- RENT PROPERTY PAGE -->
+   <div id="page-rent-property" class="page">
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+     <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Properties for Rent</h1>
+      <p class="text-slate-600 mb-8">Discover premium rental properties in Lagos</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="rent-properties-grid"><!-- Properties will be populated by JS -->
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+       <div>
+        <h3 class="text-2xl font-bold mb-4">Kala</h3>
+        <p class="text-slate-400">Your trusted partner in finding the perfect property in Lagos.</p>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-yellow-400 transition-colors">Home</a></li>
+         <li><a href="#" onclick="navigateTo('property'); return false;" class="hover:text-yellow-400 transition-colors">Properties</a></li>
+         <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Property Types</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('buy-property'); return false;" class="hover:text-yellow-400 transition-colors">Buy Property</a></li>
+         <li><a href="#" onclick="navigateTo('rent-property'); return false;" class="hover:text-yellow-400 transition-colors">Rent Property</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li>Victoria Island, Lagos</li>
+         <li>+234 800 KALA 000</li>
+         <li>info@kala.ng</li>
+        </ul>
+       </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+       <p>© 2024 Kala Real Estate. All rights reserved.</p>
+      </div>
+     </div>
+    </footer>
+   </div><!-- ALL PROPERTIES PAGE -->
+   <div id="page-all-properties" class="page">
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+     <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">All Properties</h1>
+      <p class="text-slate-600 mb-8">Browse our complete collection of premium properties</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-listings-grid"><!-- Properties will be populated by JS -->
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+       <div>
+        <h3 class="text-2xl font-bold mb-4">Kala</h3>
+        <p class="text-slate-400">Your trusted partner in finding the perfect property in Lagos.</p>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('home'); return false;" class="hover:text-yellow-400 transition-colors">Home</a></li>
+         <li><a href="#" onclick="navigateTo('property'); return false;" class="hover:text-yellow-400 transition-colors">Properties</a></li>
+         <li><a href="#" onclick="navigateTo('about'); return false;" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Property Types</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li><a href="#" onclick="navigateTo('buy-property'); return false;" class="hover:text-yellow-400 transition-colors">Buy Property</a></li>
+         <li><a href="#" onclick="navigateTo('rent-property'); return false;" class="hover:text-yellow-400 transition-colors">Rent Property</a></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 text-slate-400">
+         <li>Victoria Island, Lagos</li>
+         <li>+234 800 KALA 000</li>
+         <li>info@kala.ng</li>
+        </ul>
+       </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
+       <p>© 2024 Kala Real Estate. All rights reserved.</p>
+      </div>
+     </div>
+    </footer>
+   </div><!-- ABOUT PAGE -->
+   <div id="page-about" class="page">
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-white">
+     <div class="max-w-7xl mx-auto"><!-- Hero -->
+      <div class="text-center mb-16">
+       <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">About Kala</h1>
+       <p class="text-xl text-slate-600 max-w-3xl mx-auto">Lagos' premier real estate agency, dedicated to helping you find your perfect property since 2015.</p>
+      </div><!-- Stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+       <div class="bg-yellow-400 rounded-2xl p-6 text-center">
+        <div class="text-4xl font-bold text-slate-900 mb-2">
+         55K+
+        </div>
+        <div class="text-slate-700">
+         Happy Customers
+        </div>
+       </div>
+       <div class="bg-slate-800 rounded-2xl p-6 text-center">
+        <div class="text-4xl font-bold text-white mb-2">
+         1,200+
+        </div>
+        <div class="text-slate-300">
+         Properties Sold
+        </div>
+       </div>
+       <div class="bg-yellow-400 rounded-2xl p-6 text-center">
+        <div class="text-4xl font-bold text-slate-900 mb-2">
+         9+
+        </div>
+        <div class="text-slate-700">
+         Years Experience
+        </div>
+       </div>
+       <div class="bg-slate-800 rounded-2xl p-6 text-center">
+        <div class="text-4xl font-bold text-white mb-2">
+         50+
+        </div>
+        <div class="text-slate-300">
+         Expert Agents
+        </div>
+       </div>
+      </div><!-- Mission -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+       <div><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&amp;q=80" alt="Our Office" class="w-full h-80 object-cover rounded-2xl shadow-xl" loading="lazy" onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+       </div>
+       <div>
+        <h2 class="text-3xl font-bold text-slate-900 mb-6">Our Mission</h2>
+        <p class="text-slate-600 mb-4">At Kala, we believe everyone deserves to find their perfect home. Our mission is to make the property buying, selling, and renting experience seamless, transparent, and enjoyable.</p>
+        <p class="text-slate-600 mb-6">We combine local expertise with modern technology to deliver exceptional results for our clients across Lagos.</p><button onclick="openContactModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg"> Get in Touch </button>
+       </div>
+      </div><!-- Values -->
+      <div class="bg-gray-100 rounded-3xl p-8 sm:p-12">
+       <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center">Our Values</h2>
+       <div class="grid sm:grid-cols-3 gap-8">
+        <div class="text-center">
+         <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-slate-900" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <h3 class="text-xl font-bold text-slate-900 mb-2">Trust</h3>
+         <p class="text-slate-600">Building lasting relationships through honesty and integrity.</p>
+        </div>
+        <div class="text-center">
+         <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-slate-900" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+         </div>
+         <h3 class="text-xl font-bold text-slate-900 mb-2">Excellence</h3>
+         <p class="text-slate-600">Delivering premium service that exceeds expectations.</p>
+        </div>
+        <div class="text-center">
+         <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-slate-900" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+         </div>
+         <h3 class="text-xl font-bold text-slate-900 mb-2">Community</h3>
+         <p class="text-slate-600">Supporting and growing with our local communities.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Sticky Feedback Button (Left) --> <button onclick="openFeedbackModal()" class="fixed left-0 top-1/2 -translate-y-1/2 bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-6 shadow-2xl transition-all duration-300 z-40 hover:px-5" style="writing-mode: vertical-rl; border-radius: 0 12px 12px 0;"> 💬 Feedback </button> <!-- Sticky Customer Reviews Button (Right) --> <button onclick="openReviewsModal()" class="fixed right-0 top-1/2 -translate-y-1/2 bg-slate-800 hover:bg-slate-900 text-white font-bold px-4 py-6 shadow-2xl transition-all duration-300 z-40 hover:px-5" style="writing-mode: vertical-rl; border-radius: 12px 0 0 12px;"> 😊 Reviews </button> <!-- Feedback Modal -->
+   <div id="feedback-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-xl w-full max-h-[90%] overflow-y-auto animate-in">
+     <div class="p-6 sm:p-8">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-2xl font-bold text-slate-900">Share Your Feedback</h2><button onclick="closeFeedbackModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+      <form id="feedback-form" onsubmit="submitFeedbackForm(event)" class="space-y-5">
+       <div><label for="feedback-name" class="block text-sm font-medium text-slate-700 mb-2">Your Name</label> <input type="text" id="feedback-name" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="John Doe">
+       </div>
+       <div><label for="feedback-email" class="block text-sm font-medium text-slate-700 mb-2">Email Address</label> <input type="email" id="feedback-email" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="john@example.com">
+       </div>
+       <div><label for="feedback-rating" class="block text-sm font-medium text-slate-700 mb-2">How would you rate your experience?</label>
+        <div class="flex gap-2 justify-center py-2"><button type="button" onclick="setRating(1)" class="rating-btn text-3xl hover:scale-125 transition-transform" data-rating="1">⭐</button> <button type="button" onclick="setRating(2)" class="rating-btn text-3xl hover:scale-125 transition-transform" data-rating="2">⭐</button> <button type="button" onclick="setRating(3)" class="rating-btn text-3xl hover:scale-125 transition-transform" data-rating="3">⭐</button> <button type="button" onclick="setRating(4)" class="rating-btn text-3xl hover:scale-125 transition-transform" data-rating="4">⭐</button> <button type="button" onclick="setRating(5)" class="rating-btn text-3xl hover:scale-125 transition-transform" data-rating="5">⭐</button>
+        </div><input type="hidden" id="feedback-rating-value" required>
+       </div>
+       <div><label for="feedback-category" class="block text-sm font-medium text-slate-700 mb-2">Feedback Category</label> <select id="feedback-category" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Select category</option> <option value="website">Website Experience</option> <option value="agent">Agent Service</option> <option value="property">Property Viewing</option> <option value="process">Buying/Renting Process</option> <option value="other">Other</option> </select>
+       </div>
+       <div><label for="feedback-message" class="block text-sm font-medium text-slate-700 mb-2">Your Feedback</label> <textarea id="feedback-message" rows="4" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all resize-none" placeholder="Tell us about your experience..."></textarea>
+       </div><button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"> Submit Feedback </button>
+      </form>
+      <div id="feedback-success" class="hidden text-center py-8">
+       <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-bold text-slate-900 mb-2">Thank You!</h3>
+       <p class="text-slate-600 mb-6">Your feedback helps us improve our service. We appreciate you taking the time to share!</p><button onclick="closeFeedbackModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-8 py-3 rounded-full transition-all"> Close </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Customer Reviews Modal -->
+   <div id="reviews-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90%] overflow-y-auto animate-in">
+     <div class="p-6 sm:p-8">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="text-2xl font-bold text-slate-900">Happy Customer Reviews</h2>
+        <div id="review-summary" class="mt-2"></div>
+       </div><button onclick="closeReviewsModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+      <div class="space-y-4"><!-- Review 1 -->
+       <div class="bg-gray-50 rounded-2xl p-5">
+        <div class="flex items-start gap-4">
+         <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold text-slate-900 flex-shrink-0">
+          O
+         </div>
+         <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+           <h4 class="font-bold text-slate-900">Oluwaseun Adekunle</h4>
+           <div class="flex text-yellow-400 text-sm">
+            ⭐⭐⭐⭐⭐
+           </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-2">"Exceptional service! The Kala team helped us find our dream home in Lekki. The entire process was smooth and professional. Highly recommend!"</p><span class="text-xs text-slate-400">Purchased in Lekki • 2 weeks ago</span>
+         </div>
+        </div>
+       </div><!-- Review 2 -->
+       <div class="bg-gray-50 rounded-2xl p-5">
+        <div class="flex items-start gap-4">
+         <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-lg font-bold text-white flex-shrink-0">
+          A
+         </div>
+         <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+           <h4 class="font-bold text-slate-900">Amaka Obi</h4>
+           <div class="flex text-yellow-400 text-sm">
+            ⭐⭐⭐⭐⭐
+           </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-2">"Best real estate agency in Lagos! They listened to all my requirements and found the perfect apartment in VI. The agent was knowledgeable and patient."</p><span class="text-xs text-slate-400">Rented in Victoria Island • 1 month ago</span>
+         </div>
+        </div>
+       </div><!-- Review 3 -->
+       <div class="bg-gray-50 rounded-2xl p-5">
+        <div class="flex items-start gap-4">
+         <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold text-slate-900 flex-shrink-0">
+          T
+         </div>
+         <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+           <h4 class="font-bold text-slate-900">Tunde Ibrahim</h4>
+           <div class="flex text-yellow-400 text-sm">
+            ⭐⭐⭐��⭐
+           </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-2">"Professional and trustworthy. Sold my property in Ikoyi within 3 weeks at a great price. The marketing was top-notch!"</p><span class="text-xs text-slate-400">Sold in Ikoyi • 3 weeks ago</span>
+         </div>
+        </div>
+       </div><!-- Review 4 -->
+       <div class="bg-gray-50 rounded-2xl p-5">
+        <div class="flex items-start gap-4">
+         <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-lg font-bold text-white flex-shrink-0">
+          F
+         </div>
+         <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+           <h4 class="font-bold text-slate-900">Folake Adeyemi</h4>
+           <div class="flex text-yellow-400 text-sm">
+            ⭐⭐⭐⭐⭐
+           </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-2">"Outstanding experience from start to finish. The team went above and beyond to ensure we were comfortable with our investment. Thank you Kala!"</p><span class="text-xs text-slate-400">Purchased in Banana Island • 1 month ago</span>
+         </div>
+        </div>
+       </div><!-- Review 5 -->
+       <div class="bg-gray-50 rounded-2xl p-5">
+        <div class="flex items-start gap-4">
+         <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold text-slate-900 flex-shrink-0">
+          C
+         </div>
+         <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+           <h4 class="font-bold text-slate-900">Chidi Nnamdi</h4>
+           <div class="flex text-yellow-400 text-sm">
+            ⭐⭐⭐⭐⭐
+           </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-2">"Transparent pricing, no hidden fees, and excellent customer service. Moving from abroad was stress-free thanks to their dedicated support."</p><span class="text-xs text-slate-400">Rented in Lekki • 2 months ago</span>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="mt-6 text-center"><button onclick="openFeedbackModal(); closeReviewsModal();" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-8 py-3 rounded-full transition-all duration-300"> Leave Your Review </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Contact Modal -->
+   <div id="contact-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90%] overflow-y-auto animate-in">
+     <div class="p-6 sm:p-8">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-2xl font-bold text-slate-900">Contact Us</h2><button onclick="closeContactModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+      <form id="contact-form" onsubmit="submitContactForm(event)" class="space-y-5">
+       <div class="grid sm:grid-cols-2 gap-5">
+        <div><label for="contact-firstname" class="block text-sm font-medium text-slate-700 mb-2">First Name</label> <input type="text" id="contact-firstname" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="John">
+        </div>
+        <div><label for="contact-lastname" class="block text-sm font-medium text-slate-700 mb-2">Last Name</label> <input type="text" id="contact-lastname" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="Doe">
+        </div>
+       </div>
+       <div><label for="contact-email" class="block text-sm font-medium text-slate-700 mb-2">Email Address</label> <input type="email" id="contact-email" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="john@example.com">
+       </div>
+       <div><label for="contact-phone" class="block text-sm font-medium text-slate-700 mb-2">Phone Number</label> <input type="tel" id="contact-phone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all" placeholder="+234 800 000 0000">
+       </div>
+       <div><label for="contact-interest" class="block text-sm font-medium text-slate-700 mb-2">I'm interested in</label> <select id="contact-interest" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Select an option</option> <option value="buying">Buying a Property</option> <option value="selling">Selling a Property</option> <option value="renting">Renting a Property</option> <option value="investment">Property Investment</option> <option value="other">Other Inquiry</option> </select>
+       </div>
+       <div><label for="contact-budget" class="block text-sm font-medium text-slate-700 mb-2">Budget Range</label> <select id="contact-budget" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none cursor-pointer"> <option value="">Select budget range</option> <option value="0-50">₦0 - ₦50 Million</option> <option value="50-100">₦50 - ₦100 Million</option> <option value="100-200">₦100 - ₦200 Million</option> <option value="200-500">₦200 - ₦500 Million</option> <option value="500+">₦500 Million+</option> </select>
+       </div>
+       <div><label for="contact-message" class="block text-sm font-medium text-slate-700 mb-2">Message</label> <textarea id="contact-message" rows="4" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all resize-none" placeholder="Tell us more about what you're looking for..."></textarea>
+       </div><button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"> Send Message </button>
+      </form>
+      <div id="contact-success" class="hidden text-center py-8">
+       <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-bold text-slate-900 mb-2">Message Sent!</h3>
+       <p class="text-slate-600 mb-6">Thank you for contacting us. We'll get back to you within 24 hours.</p><button onclick="closeContactModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-8 py-3 rounded-full transition-all"> Close </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Property Detail Modal -->
+   <div id="property-modal" class="modal fixed inset-0 z-50 bg-black/60 backdrop-blur-sm overflow-y-auto py-4">
+    <div class="min-h-full flex items-center justify-center p-2 sm:p-4">
+     <div class="bg-white rounded-2xl max-w-3xl w-full animate-in">
+      <div id="property-modal-content"><!-- Content populated by JS -->
+      </div>
+     </div>
+    </div>
+   </div><!-- Image Lightbox Modal -->
+   <div id="image-lightbox" class="image-lightbox" onclick="closeLightbox()"><button onclick="closeLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-colors z-10">
+     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+     </svg></button> <img id="lightbox-image" src="" alt="" onclick="event.stopPropagation()" loading="lazy" onerror="this.src=''; this.alt='Image failed to load';">
+   </div>
+  </div>
+  <script>
+    // Google Apps Script Web App URL - Replace with your deployed script URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxok6907m9EjzrwazBqQ3GzrXAQ4EY60Dr0ZGp4hLom42k9CesuZ2KV9LS5W5u2e-Ja_w/exec';
+    
+    // Property Data
+    const properties = [
+      {
+        id: 0,
+        name: "The New Spring Villa",
+        location: "Lekki Phase 1, Lagos",
+        price: "₦185,000,000",
+        priceNum: 185000000,
+        type: "sale",
+        bedrooms: 5,
+        bathrooms: 6,
+        sqft: "6,500",
+        image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80",
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80"
+        ],
+        description: "A stunning contemporary villa featuring an infinity pool, smart home technology, and breathtaking views. This masterpiece of modern architecture offers the perfect blend of luxury and comfort.",
+        features: ["Infinity Pool", "Smart Home", "Private Garden", "24/7 Security", "Gym", "Home Cinema"],
+        agent: { name: "Adebayo Johnson", phone: "2348012345678" }
+      },
+      {
+        id: 1,
+        name: "The River Side",
+        location: "Banana Island, Lagos",
+        price: "₦495,000,000",
+        priceNum: 495000000,
+        type: "sale",
+        bedrooms: 7,
+        bathrooms: 8,
+        sqft: "12,000",
+        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80"
+        ],
+        description: "An exclusive waterfront mansion in the most prestigious neighborhood of Lagos. Experience unparalleled luxury with private beach access and panoramic lagoon views.",
+        features: ["Waterfront", "Private Dock", "Wine Cellar", "Helipad", "Staff Quarters", "Tennis Court"],
+        agent: { name: "Chioma Okafor", phone: "2348023456789" }
+      },
+      {
+        id: 2,
+        name: "Lily Residence",
+        location: "Victoria Island, Lagos",
+        price: "₦170,000,000",
+        priceNum: 170000000,
+        type: "sale",
+        bedrooms: 4,
+        bathrooms: 5,
+        sqft: "4,800",
+        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+          "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&q=80",
+          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80"
+        ],
+        description: "A beautifully designed residence combining brick and wood elements for a warm, modern aesthetic. Perfect for families seeking elegance in the heart of VI.",
+        features: ["Rooftop Terrace", "Home Office", "Modern Kitchen", "Garden", "Parking", "Generator"],
+        agent: { name: "Emeka Nwosu", phone: "2348034567890" }
+      },
+      {
+        id: 3,
+        name: "Grand Hill Residence",
+        location: "Ikoyi, Lagos",
+        price: "₦340,000,000",
+        priceNum: 340000000,
+        type: "sale",
+        bedrooms: 6,
+        bathrooms: 7,
+        sqft: "8,200",
+        image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80",
+          "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+        ],
+        description: "A minimalist architectural marvel in prestigious Ikoyi. Clean lines and premium finishes create an atmosphere of sophisticated modern living.",
+        features: ["Swimming Pool", "Guest House", "Landscaped Gardens", "CCTV", "Borehole", "Solar Power"],
+        agent: { name: "Funke Adeleke", phone: "2348045678901" }
+      },
+      {
+        id: 4,
+        name: "New Lake Residence",
+        location: "Lekki Phase 2, Lagos",
+        price: "₦450,000,000",
+        priceNum: 450000000,
+        type: "sale",
+        bedrooms: 6,
+        bathrooms: 7,
+        sqft: "9,500",
+        image: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80",
+          "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+        ],
+        description: "A futuristic geometric masterpiece overlooking the lagoon. This architectural wonder offers cutting-edge design with sustainable living features.",
+        features: ["Lake View", "Solar Panels", "EV Charging", "Smart Security", "Infinity Pool", "Spa"],
+        agent: { name: "Tunde Bakare", phone: "2348056789012" }
+      },
+      {
+        id: 5,
+        name: "Ocean View Penthouse",
+        location: "Victoria Island, Lagos",
+        price: "₦25,000,000/year",
+        priceNum: 25000000,
+        type: "rent",
+        bedrooms: 3,
+        bathrooms: 4,
+        sqft: "3,200",
+        image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+          "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+        ],
+        description: "Luxurious penthouse apartment with stunning ocean views. Fully furnished with premium amenities and concierge services.",
+        features: ["Ocean View", "Furnished", "Concierge", "Gym Access", "Pool Access", "Parking"],
+        agent: { name: "Ngozi Eze", phone: "2348067890123" }
+      },
+      {
+        id: 6,
+        name: "Executive Apartment",
+        location: "Ikoyi, Lagos",
+        price: "₦18,000,000/year",
+        priceNum: 18000000,
+        type: "rent",
+        bedrooms: 3,
+        bathrooms: 3,
+        sqft: "2,800",
+        image: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80",
+          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80"
+        ],
+        description: "Elegant executive apartment in a secure compound. Perfect for professionals seeking comfort and convenience in Ikoyi.",
+        features: ["Serviced", "24/7 Power", "Security", "Gym", "Pool", "Parking"],
+        agent: { name: "Yusuf Mohammed", phone: "2348078901234" }
+      },
+      {
+        id: 7,
+        name: "Sunset Terraces",
+        location: "Lekki, Lagos",
+        price: "₦280,000,000",
+        priceNum: 280000000,
+        type: "sale",
+        bedrooms: 5,
+        bathrooms: 5,
+        sqft: "5,500",
+        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80",
+          "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80",
+          "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+        ],
+        description: "Modern terrace with beautiful sunset views. Features contemporary design with spacious rooms and a private rooftop lounge.",
+        features: ["Rooftop Lounge", "Modern Kitchen", "BQ", "Security", "Parking", "Generator"],
+        agent: { name: "Adebayo Johnson", phone: "2348012345678" }
+      },
+      {
+        id: 8,
+        name: "Palm Heights Duplex",
+        location: "Ajah, Lagos",
+        price: "₦95,000,000",
+        priceNum: 95000000,
+        type: "sale",
+        bedrooms: 4,
+        bathrooms: 4,
+        sqft: "3,800",
+        image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80"
+        ],
+        description: "Spacious duplex in a serene estate. Perfect for growing families looking for comfort and affordability.",
+        features: ["Estate Living", "Ample Parking", "CCTV", "Pop Ceiling", "Water", "Generator"],
+        agent: { name: "Chioma Okafor", phone: "2348023456789" }
+      },
+      {
+        id: 9,
+        name: "Skyline Apartment",
+        location: "Victoria Island, Lagos",
+        price: "₦15,000,000/year",
+        priceNum: 15000000,
+        type: "rent",
+        bedrooms: 2,
+        bathrooms: 2,
+        sqft: "2,200",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+          "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&q=80"
+        ],
+        description: "Chic 2-bedroom apartment with city skyline views. Fully serviced with modern amenities in the heart of VI.",
+        features: ["Serviced", "City View", "Gym", "Pool", "Security", "Backup Power"],
+        agent: { name: "Emeka Nwosu", phone: "2348034567890" }
+      },
+      {
+        id: 10,
+        name: "Garden Estate Villa",
+        location: "Magodo, Lagos",
+        price: "₦220,000,000",
+        priceNum: 220000000,
+        type: "sale",
+        bedrooms: 5,
+        bathrooms: 6,
+        sqft: "5,200",
+        image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80"
+        ],
+        description: "Luxurious villa in a gated estate surrounded by lush gardens. Features include a private pool and spacious entertainment areas.",
+        features: ["Swimming Pool", "Garden", "Estate", "BQ", "Security", "Recreation"],
+        agent: { name: "Funke Adeleke", phone: "2348045678901" }
+      },
+      {
+        id: 11,
+        name: "Marina Bay Loft",
+        location: "Lagos Island, Lagos",
+        price: "₦12,000,000/year",
+        priceNum: 12000000,
+        type: "rent",
+        bedrooms: 2,
+        bathrooms: 2,
+        sqft: "1,900",
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80"
+        ],
+        description: "Industrial-chic loft apartment in the business district. Perfect for young professionals seeking modern urban living.",
+        features: ["Loft Style", "Modern Design", "Central Location", "Security", "Parking", "Backup Power"],
+        agent: { name: "Tunde Bakare", phone: "2348056789012" }
+      }
+    ];
+
+    // Config
+    const defaultConfig = {
+      brand_name: "Kala",
+      hero_headline: "Find Your Perfect Property with Kala",
+      hero_subheadline: "Discover your dream home with Lagos' most trusted real estate partner. Buy, sell, or rent premium properties with confidence.",
+      primary_color: "#FACC15",
+      secondary_color: "#1E293B",
+      text_color: "#0F172A",
+      background_color: "#FFFFFF",
+      surface_color: "#F8FAFC"
+    };
+
+    let config = { ...defaultConfig };
+    let currentSlide = 0;
+    let slideInterval;
+    let currentPage = 'home';
+    let currentSearchCriteria = null;
+
+    // Element SDK Integration
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          applyConfig();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+            },
+            {
+              get: () => cfg.surface_color || defaultConfig.surface_color,
+              set: (v) => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+            },
+            {
+              get: () => cfg.secondary_color || defaultConfig.secondary_color,
+              set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["brand_name", cfg.brand_name || defaultConfig.brand_name],
+          ["hero_headline", cfg.hero_headline || defaultConfig.hero_headline],
+          ["hero_subheadline", cfg.hero_subheadline || defaultConfig.hero_subheadline]
+        ])
+      });
+    }
+
+    function applyConfig() {
+      const brandLogo = document.getElementById('brand-logo');
+      const heroTitle = document.getElementById('hero-title');
+      const heroSubtitle = document.getElementById('hero-subtitle');
+      
+      if (brandLogo) brandLogo.textContent = config.brand_name || defaultConfig.brand_name;
+      if (heroTitle) heroTitle.textContent = config.hero_headline || defaultConfig.hero_headline;
+      if (heroSubtitle) heroSubtitle.textContent = config.hero_subheadline || defaultConfig.hero_subheadline;
+    }
+
+    // Carousel Functions
+    function startCarousel() {
+      slideInterval = setInterval(() => {
+        nextSlide();
+      }, 5000);
+    }
+
+    function stopCarousel() {
+      clearInterval(slideInterval);
+    }
+
+    function goToSlide(index) {
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('.carousel-dot');
+      
+      slides.forEach((slide, i) => {
+        slide.style.opacity = i === index ? '1' : '0';
+      });
+      
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-white', i === index);
+        dot.classList.toggle('bg-white/50', i !== index);
+      });
+      
+      currentSlide = index;
+      stopCarousel();
+      startCarousel();
+    }
+
+    function nextSlide() {
+      const next = (currentSlide + 1) % 3;
+      goToSlide(next);
+    }
+
+    function prevSlide() {
+      const prev = (currentSlide - 1 + 3) % 3;
+      goToSlide(prev);
+    }
+
+    // Navigation
+    function navigateTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const targetPage = document.getElementById(`page-${page}`);
+      if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = page;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Populate grids
+        if (page === 'buy-property') {
+          currentSearchCriteria = null;
+          populateGrid('buy-properties-grid', 'sale');
+        }
+        if (page === 'rent-property') {
+          currentSearchCriteria = null;
+          populateGrid('rent-properties-grid', 'rent');
+        }
+        if (page === 'all-properties') {
+          currentSearchCriteria = null;
+          populateGrid('all-listings-grid', 'all');
+        }
+        if (page === 'property' && currentSearchCriteria) {
+          performSearch();
+        } else if (page === 'property') {
+          currentSearchCriteria = null;
+          populateGrid('all-properties-grid', 'all');
+          const summaryElement = document.getElementById('search-results-summary');
+          if (summaryElement) summaryElement.textContent = '';
+        }
+      }
+    }
+
+    function populateGrid(gridId, type) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      
+      const filtered = type === 'all' ? properties : properties.filter(p => p.type === type);
+      
+      grid.innerHTML = filtered.map(prop => `
+        <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 cursor-pointer" onclick="openPropertyModal(${prop.id})">
+          <div class="relative">
+            <img src="${prop.image}" 
+                 alt="${prop.name}" 
+                 class="w-full h-56 object-cover"
+                 loading="lazy"
+                 onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+            <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+              ${prop.type === 'sale' ? 'For Sale' : 'For Rent'}
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">${prop.name}</h3>
+            <p class="text-slate-500 flex items-center gap-2 text-sm mb-4">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+              </svg>
+              ${prop.location}
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="text-xl font-bold text-slate-900">${prop.price}</span>
+              <button onclick="event.stopPropagation(); openPropertyModal(${prop.id})" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg transition-all text-xs">
+                See Details
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Mobile Menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const closeIcon = document.getElementById('close-icon');
+      
+      menu.classList.toggle('hidden');
+      menuIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    }
+
+    // Contact Modal
+    function openContactModal() {
+      document.getElementById('contact-modal').classList.add('active');
+      document.getElementById('contact-form').classList.remove('hidden');
+      document.getElementById('contact-success').classList.add('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactModal() {
+      document.getElementById('contact-modal').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('contact-form').reset();
+    }
+
+    async function submitContactForm(e) {
+      e.preventDefault();
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="inline-block animate-spin mr-2">⏳</span> Sending...';
+      
+      const formData = {
+        type: 'contact',
+        firstName: document.getElementById('contact-firstname').value,
+        lastName: document.getElementById('contact-lastname').value,
+        email: document.getElementById('contact-email').value,
+        phone: document.getElementById('contact-phone').value,
+        interest: document.getElementById('contact-interest').value,
+        budget: document.getElementById('contact-budget').value || 'Not specified',
+        message: document.getElementById('contact-message').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        document.getElementById('contact-form').classList.add('hidden');
+        document.getElementById('contact-success').classList.remove('hidden');
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        document.getElementById('contact-form').classList.add('hidden');
+        document.getElementById('contact-success').classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    }
+
+    // Feedback Modal
+    let selectedRating = 0;
+    let userReviews = [];
+
+    // Load reviews from localStorage on page load
+    function loadReviews() {
+      const savedReviews = localStorage.getItem('kala_reviews');
+      if (savedReviews) {
+        try {
+          userReviews = JSON.parse(savedReviews);
+          // Convert date strings back to Date objects
+          userReviews = userReviews.map(review => ({
+            ...review,
+            date: new Date(review.date)
+          }));
+        } catch (e) {
+          userReviews = [];
+        }
+      }
+    }
+
+    // Save reviews to localStorage
+    function saveReviews() {
+      try {
+        localStorage.setItem('kala_reviews', JSON.stringify(userReviews));
+      } catch (e) {
+        console.error('Failed to save reviews');
+      }
+    }
+
+    function openFeedbackModal() {
+      document.getElementById('feedback-modal').classList.add('active');
+      document.getElementById('feedback-form').classList.remove('hidden');
+      document.getElementById('feedback-success').classList.add('hidden');
+      selectedRating = 0;
+      updateRatingDisplay();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFeedbackModal() {
+      document.getElementById('feedback-modal').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('feedback-form').reset();
+      document.getElementById('feedback-rating-value').value = '';
+      selectedRating = 0;
+      updateRatingDisplay();
+    }
+
+    function setRating(rating) {
+      selectedRating = rating;
+      document.getElementById('feedback-rating-value').value = rating;
+      updateRatingDisplay();
+    }
+
+    function updateRatingDisplay() {
+      const buttons = document.querySelectorAll('.rating-btn');
+      buttons.forEach((btn, index) => {
+        if (index < selectedRating) {
+          btn.style.opacity = '1';
+          btn.style.filter = 'grayscale(0)';
+        } else {
+          btn.style.opacity = '0.3';
+          btn.style.filter = 'grayscale(1)';
+        }
+      });
+    }
+
+    async function submitFeedbackForm(e) {
+      e.preventDefault();
+      if (selectedRating === 0) {
+        // Show inline message instead of alert
+        const ratingSection = document.getElementById('feedback-rating-value').parentElement;
+        let errorMsg = ratingSection.querySelector('.error-message');
+        if (!errorMsg) {
+          errorMsg = document.createElement('div');
+          errorMsg.className = 'error-message text-red-600 text-sm mt-2';
+          errorMsg.textContent = 'Please select a rating before submitting.';
+          ratingSection.appendChild(errorMsg);
+        }
+        return;
+      }
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="inline-block animate-spin mr-2">⏳</span> Submitting...';
+      
+      // Get form data
+      const name = document.getElementById('feedback-name').value;
+      const email = document.getElementById('feedback-email').value;
+      const rating = selectedRating;
+      const category = document.getElementById('feedback-category').value;
+      const message = document.getElementById('feedback-message').value;
+      
+      // Create review object
+      const review = {
+        name: name,
+        rating: rating,
+        message: message,
+        category: category,
+        date: new Date(),
+        initial: name.charAt(0).toUpperCase()
+      };
+      
+      // Submit to Google Sheets
+      const formData = {
+        type: 'feedback',
+        name: name,
+        email: email,
+        rating: rating,
+        category: category,
+        message: message,
+        timestamp: new Date().toISOString()
+      };
+      
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+      }
+      
+      // Add to reviews array
+      userReviews.unshift(review);
+      
+      // Save reviews to localStorage
+      saveReviews();
+      
+      // Update reviews display
+      updateReviewsDisplay();
+      
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+      
+      document.getElementById('feedback-form').classList.add('hidden');
+      document.getElementById('feedback-success').classList.remove('hidden');
+    }
+
+    // Reviews Modal
+    function openReviewsModal() {
+      updateReviewsDisplay();
+      document.getElementById('reviews-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeReviewsModal() {
+      document.getElementById('reviews-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    function updateReviewsDisplay() {
+      const reviewsContainer = document.querySelector('#reviews-modal .space-y-4');
+      const summaryContainer = document.getElementById('review-summary');
+      if (!reviewsContainer) return;
+      
+      // Generate star display
+      function getStarDisplay(rating) {
+        return '⭐'.repeat(rating);
+      }
+      
+      // Format time ago
+      function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        if (seconds < 60) return 'Just now';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        const days = Math.floor(hours / 24);
+        if (days < 30) return `${days} day${days > 1 ? 's' : ''} ago`;
+        const months = Math.floor(days / 30);
+        return `${months} month${months > 1 ? 's' : ''} ago`;
+      }
+      
+      // Get category display text
+      function getCategoryText(category) {
+        const categoryMap = {
+          'website': 'Website Experience',
+          'agent': 'Agent Service',
+          'property': 'Property Viewing',
+          'process': 'Buying/Renting Process',
+          'other': 'General Feedback'
+        };
+        return categoryMap[category] || category;
+      }
+      
+      // Calculate average rating and total reviews
+      const totalReviews = userReviews.length;
+      let averageRating = 0;
+      let summaryHTML = '';
+      
+      if (totalReviews > 0) {
+        const totalRating = userReviews.reduce((sum, review) => sum + review.rating, 0);
+        averageRating = (totalRating / totalReviews).toFixed(1);
+        summaryHTML = `
+          <div class="flex items-center gap-3">
+            <div class="flex text-yellow-400 text-lg">⭐⭐⭐⭐⭐</div>
+            <div class="text-slate-600 text-sm">
+              <span class="font-bold text-slate-900">${averageRating}</span> out of 5 
+              (<span class="font-semibold">${totalReviews.toLocaleString()}</span> ${totalReviews === 1 ? 'review' : 'reviews'})
+            </div>
+          </div>
+        `;
+      }
+      
+      if (summaryContainer) {
+        summaryContainer.innerHTML = summaryHTML;
+      }
+      
+      // Build user reviews HTML
+      const userReviewsHTML = userReviews.map(review => `
+        <div class="bg-yellow-50 rounded-2xl p-5 border-2 border-yellow-200">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold text-slate-900 flex-shrink-0">
+              ${review.initial}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-slate-900">${review.name}</h4>
+                <div class="flex text-yellow-400 text-sm">${getStarDisplay(review.rating)}</div>
+              </div>
+              <p class="text-slate-600 text-sm leading-relaxed mb-2">
+                "${review.message}"
+              </p>
+              <span class="text-xs text-slate-400">${getCategoryText(review.category)} • ${getTimeAgo(review.date)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      // Default reviews HTML (empty - will show user reviews only)
+      const defaultReviewsHTML = '';
+      
+      // Combine user reviews and default reviews
+      reviewsContainer.innerHTML = userReviewsHTML + defaultReviewsHTML;
+    }
+
+    // Property Modal
+    function openPropertyModal(id) {
+      const prop = properties.find(p => p.id === id);
+      if (!prop) return;
+      
+      const modal = document.getElementById('property-modal');
+      const content = document.getElementById('property-modal-content');
+      
+      content.innerHTML = `
+        <div class="p-4 sm:p-5">
+          <button onclick="closePropertyModal()" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white hover:bg-gray-100 flex items-center justify-center transition-colors shadow-lg z-10">
+            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+            <div>
+              <div class="inline-block bg-yellow-400 text-slate-900 font-bold px-2 py-0.5 rounded-full text-xs mb-1">
+                ${prop.type === 'sale' ? 'For Sale' : 'For Rent'}
+              </div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-1">${prop.name}</h2>
+              <p class="text-slate-500 flex items-center gap-1 text-xs">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+                ${prop.location}
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="text-xl font-bold text-yellow-500">${prop.price}</div>
+            </div>
+          </div>
+          
+          <!-- Image Gallery -->
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            ${prop.images.map((img, i) => `
+              <img src="${img}" 
+                   alt="${prop.name} ${i + 1}" 
+                   class="w-full h-40 sm:h-48 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity shadow-md"
+                   loading="lazy"
+                   onclick="openLightbox('${img}')"
+                   onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+            `).join('')}
+          </div>
+          
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="bg-gray-100 rounded-lg p-2 text-center">
+              <div class="text-lg font-bold text-slate-900">${prop.bedrooms}</div>
+              <div class="text-xs text-slate-500">Bedrooms</div>
+            </div>
+            <div class="bg-gray-100 rounded-lg p-2 text-center">
+              <div class="text-lg font-bold text-slate-900">${prop.bathrooms}</div>
+              <div class="text-xs text-slate-500">Bathrooms</div>
+            </div>
+            <div class="bg-gray-100 rounded-lg p-2 text-center">
+              <div class="text-lg font-bold text-slate-900">${prop.sqft}</div>
+              <div class="text-xs text-slate-500">Sq Ft</div>
+            </div>
+          </div>
+          
+          <!-- Description -->
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-slate-900 mb-1">Description</h3>
+            <p class="text-slate-600 text-xs leading-relaxed">${prop.description}</p>
+          </div>
+          
+          <!-- Features -->
+          <div class="mb-4">
+            <h3 class="text-sm font-bold text-slate-900 mb-2">Features</h3>
+            <div class="flex flex-wrap gap-1.5">
+              ${prop.features.map(f => `
+                <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded-full text-xs">${f}</span>
+              `).join('')}
+            </div>
+          </div>
+          
+          <!-- Agent Info -->
+          <div class="bg-slate-800 rounded-xl p-3">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-sm font-bold text-slate-900">
+                ${prop.agent.name.charAt(0)}
+              </div>
+              <div>
+                <div class="text-white font-semibold text-xs">${prop.agent.name}</div>
+                <div class="text-slate-400 text-xs">Property Agent</div>
+              </div>
+            </div>
+            <button onclick="contactAgentWhatsApp(${prop.id})" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-xs">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Contact Agent
+            </button>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePropertyModal() {
+      document.getElementById('property-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function contactAgentWhatsApp(id) {
+      const prop = properties.find(p => p.id === id);
+      if (!prop) return;
+      
+      const message = encodeURIComponent(`Hello! I'm interested in the property: ${prop.name} at ${prop.location} priced at ${prop.price}. Please share more details.`);
+      const url = `https://wa.me/${prop.agent.phone}?text=${message}`;
+      window.open(url, '_blank');
+    }
+
+    // Image Lightbox Functions
+    function openLightbox(imageSrc) {
+      const lightbox = document.getElementById('image-lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      lightboxImage.src = imageSrc;
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('image-lightbox');
+      lightbox.classList.remove('active');
+      document.getElementById('lightbox-image').src = '';
+    }
+
+    // Search
+    function searchProperties() {
+      const location = document.getElementById('location-select').value;
+      const propertyType = document.getElementById('property-type').value;
+      const budget = document.getElementById('budget-range').value;
+      const bedrooms = document.getElementById('bedrooms').value;
+      
+      currentSearchCriteria = { location, propertyType, budget, bedrooms };
+      
+      navigateTo('property');
+      performSearch();
+    }
+    
+    function performSearch() {
+      if (!currentSearchCriteria) {
+        populateGrid('all-properties-grid', 'all');
+        return;
+      }
+      
+      const { location, propertyType, budget, bedrooms } = currentSearchCriteria;
+      
+      // Filter properties based on search criteria
+      let filtered = properties.filter(prop => {
+        let matches = true;
+        
+        // Filter by location
+        if (location) {
+          const locationLower = location.toLowerCase().replace('-', ' ');
+          const propLocationLower = prop.location.toLowerCase();
+          matches = matches && propLocationLower.includes(locationLower);
+        }
+        
+        // Filter by property type (optional - you can map types to property names)
+        if (propertyType && propertyType !== 'residence') {
+          const typeLower = propertyType.toLowerCase();
+          const propNameLower = prop.name.toLowerCase();
+          matches = matches && propNameLower.includes(typeLower);
+        }
+        
+        // Filter by budget
+        if (budget) {
+          const [min, max] = budget.split('-').map(n => n === '+' ? Infinity : parseInt(n) * 1000000);
+          const propPrice = prop.priceNum;
+          if (max) {
+            matches = matches && propPrice >= min && propPrice <= max;
+          } else {
+            matches = matches && propPrice >= min;
+          }
+        }
+        
+        // Filter by bedrooms
+        if (bedrooms) {
+          if (bedrooms === '5+') {
+            matches = matches && prop.bedrooms >= 5;
+          } else {
+            matches = matches && prop.bedrooms === parseInt(bedrooms);
+          }
+        }
+        
+        return matches;
+      });
+      
+      const grid = document.getElementById('all-properties-grid');
+      const noResultsMsg = document.getElementById('no-results-message');
+      const summaryElement = document.getElementById('search-results-summary');
+      
+      if (filtered.length === 0) {
+        // Show no results message
+        grid.classList.add('hidden');
+        noResultsMsg.classList.remove('hidden');
+        summaryElement.textContent = 'No properties match your search criteria';
+      } else {
+        // Show filtered results
+        grid.classList.remove('hidden');
+        noResultsMsg.classList.add('hidden');
+        
+        // Update summary
+        let summaryParts = [];
+        if (location) summaryParts.push(location.replace('-', ' '));
+        if (propertyType && propertyType !== 'residence') summaryParts.push(propertyType);
+        if (bedrooms) summaryParts.push(`${bedrooms} bedroom${bedrooms !== '1' ? 's' : ''}`);
+        if (budget) {
+          const budgetText = budget === '500+' ? '₦500M+' : `₦${budget.split('-').join('M - ₦')}M`;
+          summaryParts.push(budgetText);
+        }
+        
+        const summaryText = summaryParts.length > 0 
+          ? `Found ${filtered.length} ${filtered.length === 1 ? 'property' : 'properties'} matching: ${summaryParts.join(', ')}`
+          : `Showing ${filtered.length} ${filtered.length === 1 ? 'property' : 'properties'}`;
+        
+        summaryElement.textContent = summaryText;
+        
+        // Render filtered properties
+        grid.innerHTML = filtered.map(prop => `
+          <div class="property-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 cursor-pointer" onclick="openPropertyModal(${prop.id})">
+            <div class="relative">
+              <img src="${prop.image}" 
+                   alt="${prop.name}" 
+                   class="w-full h-56 object-cover"
+                   loading="lazy"
+                   onerror="this.src=''; this.alt='Image failed to load'; this.style.backgroundColor='#e2e8f0';">
+              <div class="absolute top-4 left-4 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-sm">
+                ${prop.type === 'sale' ? 'For Sale' : 'For Rent'}
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-slate-900 mb-2">${prop.name}</h3>
+              <p class="text-slate-500 flex items-center gap-2 text-sm mb-4">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+                ${prop.location}
+              </p>
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-bold text-slate-900">${prop.price}</span>
+                <button onclick="event.stopPropagation(); openPropertyModal(${prop.id})" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg transition-all text-xs">
+                  See Details
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Close modals on backdrop click
+    document.getElementById('contact-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeContactModal();
+    });
+
+    document.getElementById('property-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closePropertyModal();
+    });
+
+    document.getElementById('feedback-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeFeedbackModal();
+    });
+
+    document.getElementById('reviews-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeReviewsModal();
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      startCarousel();
+      goToSlide(0);
+      applyConfig();
+      loadReviews(); // Load saved reviews from localStorage
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c059ae326aba63e',t:'MTc2ODgxODA4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
